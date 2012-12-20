@@ -26,6 +26,9 @@ class WerkintMemcachedExtension extends Extension
             $this->getAlias().'_port', $config['port']
         );
         $container->setParameter(
+            $this->getAlias().'_prefix', $config['prefix']
+        );
+        $container->setParameter(
             $this->getAlias().'_session_prefix', $config['session']['prefix']
         );
         $container->setParameter(

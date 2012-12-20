@@ -20,7 +20,7 @@ class CacheCompilerPass implements CompilerPassInterface
             if (!isset($attributes[0]['ns'])) {
                 throw new \Exception('Wrong namespace in ' . $id);
             }
-            $namespace = $container->getParameter('memcached_prefix') . '_' . $attributes[0]['ns'];
+            $namespace = $container->getParameter('werkint_memcached_prefix') . '_' . $attributes[0]['ns'];
             $definition = new DefinitionDecorator('werkint.memcached.provider');
             $definition->addMethodCall(
                 'setNamespace', [$namespace]
