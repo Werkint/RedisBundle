@@ -1,0 +1,14 @@
+services:
+    werkint.memcached.service:
+        class: Werkint\MemcachedBundle\Service\Memcached
+        arguments:
+            - %werkint_memcached_host%
+            - %werkint_memcached_port%
+    werkint.memcached.provider:
+        class:    Doctrine\Common\Cache\MemcachedCache
+        abstract: true
+    werkint.memcached.session:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+        arguments:
+            - @werkint.memcached.service
+            - { prefix: %werkint_memcached_session_prefix%, expiretime: %werkint_memcached_session_expire% }

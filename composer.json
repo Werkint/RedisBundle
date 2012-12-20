@@ -1,0 +1,22 @@
+{
+	"name":        "nick4fake/memcachedbundle",
+	"type":        "library",
+	"description": "Bundle providing Memcached services",
+	"license":     "own",
+	"target-dir":  "Werkint/MemcachedBundle",
+
+	"authors":  [
+		{
+			"name":  "Bogdan Yurov",
+			"email": "bogdan@yurov.me"
+		}
+	],
+	"require":  {
+		"php": ">=5.3"
+	},
+	"autoload": {
+		"psr-0": {
+			"Werkint\\MemcachedBundle": ""
+		}
+	}
+}
