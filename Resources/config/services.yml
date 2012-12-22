@@ -1,6 +1,6 @@
 services:
     werkint.memcached.service:
-        class: Werkint\MemcachedBundle\Service\Memcached
+        class: Werkint\Bundle\MemcachedBundle\Service\Memcached
         arguments:
             - %werkint_memcached_host%
             - %werkint_memcached_port%

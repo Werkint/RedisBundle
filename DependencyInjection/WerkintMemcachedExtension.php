@@ -1,5 +1,5 @@
 <?php
-namespace Werkint\MemcachedBundle\DependencyInjection;
+namespace Werkint\Bundle\MemcachedBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,

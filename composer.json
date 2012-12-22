@@ -3,7 +3,7 @@
     "type":        "library",
     "description": "Bundle providing Memcached (namespaced) for services via tags",
     "license":     "own",
-    "target-dir":  "Werkint/MemcachedBundle",
+    "target-dir":  "Werkint/Bundle/MemcachedBundle",
 
     "authors":  [
         {
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Werkint\\MemcachedBundle": ""
+            "Werkint\\Bundle\\MemcachedBundle": ""
         }
     }
 }

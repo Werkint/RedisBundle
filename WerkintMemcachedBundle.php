@@ -1,9 +1,9 @@
 <?php
-namespace Werkint\MemcachedBundle;
+namespace Werkint\Bundle\MemcachedBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder,
-    Werkint\MemcachedBundle\Service\CacheCompilerPass;
+    Werkint\Bundle\MemcachedBundle\Service\CacheCompilerPass;
 
 class WerkintMemcachedBundle extends Bundle
 {

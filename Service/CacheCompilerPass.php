@@ -1,5 +1,5 @@
 <?php
-namespace Werkint\MemcachedBundle\Service;
+namespace Werkint\Bundle\MemcachedBundle\Service;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
     Symfony\Component\DependencyInjection\ContainerBuilder,

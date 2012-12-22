@@ -1,5 +1,5 @@
 <?php
-namespace Werkint\MemcachedBundle\Service;
+namespace Werkint\Bundle\MemcachedBundle\Service;
 
 use \Memcached as Ref;
 
