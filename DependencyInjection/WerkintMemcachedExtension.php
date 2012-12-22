@@ -3,7 +3,6 @@ namespace Werkint\MemcachedBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\DependencyInjection\Definition,
     Symfony\Component\HttpKernel\DependencyInjection\Extension,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\FileLocator;
@@ -20,19 +19,19 @@ class WerkintMemcachedExtension extends Extension
             $this->getAlias(), $config
         );
         $container->setParameter(
-            $this->getAlias().'_host', $config['host']
+            $this->getAlias() . '_host', $config['host']
         );
         $container->setParameter(
-            $this->getAlias().'_port', $config['port']
+            $this->getAlias() . '_port', $config['port']
         );
         $container->setParameter(
-            $this->getAlias().'_prefix', $config['prefix']
+            $this->getAlias() . '_prefix', $config['prefix']
         );
         $container->setParameter(
-            $this->getAlias().'_session_prefix', $config['session']['prefix']
+            $this->getAlias() . '_session_prefix', $config['session']['prefix']
         );
         $container->setParameter(
-            $this->getAlias().'_session_expire', $config['session']['expire']
+            $this->getAlias() . '_session_expire', $config['session']['expire']
         );
         $loader = new YamlFileLoader(
             $container,

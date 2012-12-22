@@ -2,8 +2,7 @@
 namespace Werkint\MemcachedBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder,
-    Symfony\Component\Config\Definition\ConfigurationInterface,
-    Symfony\Component\Config\Definition\Builder\NodeBuilder;
+    Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {

@@ -3,7 +3,6 @@ namespace Werkint\MemcachedBundle\Service;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
     Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Definition,
     Symfony\Component\DependencyInjection\DefinitionDecorator,
     Symfony\Component\DependencyInjection\Reference;
 
