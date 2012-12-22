@@ -1,5 +1,5 @@
 {
-    "name":        "werkint/memcachedbundle",
+    "name":        "werkint/bundle-memcached",
     "type":        "library",
     "description": "Bundle providing Memcached (namespaced) for services via tags",
     "license":     "own",
