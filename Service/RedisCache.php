@@ -1,39 +1,36 @@
 <?php
-namespace Werkint\Bundle\MemcachedBundle\Service;
+namespace Werkint\Bundle\RedisBundle\Service;
 
+use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 
 /**
- * Redis cache provider.
+ * Redis cache class
  *
- * @link   www.doctrine-project.org
- * @since  2.2
- * @author Osman Ungur <osmanungur@gmail.com>
+ * @author Justin Rainbow <justin.rainbow@gmail.com>
+ * @author Henrik Westphal <henrik.westphal@gmail.com>
  */
 class RedisCache extends CacheProvider
 {
     /**
-     * @var Redis|null
+     * @var Redis
      */
-    private $redis;
+    protected $redis;
 
     /**
      * Sets the redis instance to use.
      *
      * @param Redis $redis
-     *
-     * @return void
      */
-    public function setRedis(Redis $redis)
+    public function setRedis($redis)
     {
-        $redis->setOption(Redis::OPT_SERIALIZER, $this->getSerializerValue());
         $this->redis = $redis;
     }
 
     /**
-     * Gets the redis instance used by the cache.
+     * Returns the redis instance used by the cache.
      *
-     * @return Redis|null
+     * @return Redis
      */
     public function getRedis()
     {
@@ -45,7 +42,9 @@ class RedisCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        return $this->redis->get($id);
+        $result = $this->redis->get($id);
+
+        return null === $result ? false : unserialize($result);
     }
 
     /**
@@ -53,18 +52,21 @@ class RedisCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return $this->redis->exists($id);
+        return (bool)$this->redis->exists($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = false)
     {
-        if ($lifeTime > 0) {
-            return $this->redis->setex($id, $lifeTime, $data);
+        if (0 < $lifeTime) {
+            $result = $this->redis->setex($id, (int)$lifeTime, serialize($data));
+        } else {
+            $result = $this->redis->set($id, serialize($data));
         }
-        return $this->redis->set($id, $data);
+
+        return (bool)$result;
     }
 
     /**
@@ -72,7 +74,7 @@ class RedisCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return $this->redis->delete($id);
+        return (bool)$this->redis->del($id);
     }
 
     /**
@@ -80,7 +82,7 @@ class RedisCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->redis->flushDB();
+        return (bool)$this->redis->flushdb();
     }
 
     /**
@@ -88,25 +90,14 @@ class RedisCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $info = $this->redis->info();
-        return array(
-            Cache::STATS_HITS   => false,
-            Cache::STATS_MISSES => false,
-            Cache::STATS_UPTIME => $info['uptime_in_seconds'],
-            Cache::STATS_MEMORY_USAGE      => $info['used_memory'],
-            Cache::STATS_MEMORY_AVAILABLE  => false
-        );
-    }
+        $stats = $this->redis->info();
 
-    /**
-     * Returns the serializer constant to use. If Redis is compiled with
-     * igbinary support, that is used. Otherwise the default PHP serializer is
-     * used.
-     *
-     * @return integer One of the Redis::SERIALIZER_* constants
-     */
-    protected function getSerializerValue()
-    {
-        return defined('Redis::SERIALIZER_IGBINARY') ? Redis::SERIALIZER_IGBINARY : Redis::SERIALIZER_PHP;
+        return [
+            Cache::STATS_HITS              => isset($stats['keyspace_hits']) ? $stats['keyspace_hits'] : $stats['Stats']['keyspace_hits'],
+            Cache::STATS_MISSES            => isset($stats['keyspace_misses']) ? $stats['keyspace_misses'] : $stats['Stats']['keyspace_misses'],
+            Cache::STATS_UPTIME            => isset($stats['uptime_in_seconds']) ? $stats['uptime_in_seconds'] : $stats['Server']['uptime_in_seconds'],
+            Cache::STATS_MEMORY_USAGE      => isset($stats['used_memory']) ? $stats['used_memory'] : $stats['Memory']['used_memory'],
+            Cache::STATS_MEMORY_AVAILIABLE => null,
+        ];
     }
 }
