@@ -1,13 +1,13 @@
 <?php
-namespace Werkint\Bundle\MemcachedBundle\DependencyInjection;
+namespace Werkint\Bundle\RedisBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\HttpKernel\DependencyInjection\Extension,
-    Symfony\Component\Config\Definition\Processor,
-    Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class WerkintMemcachedExtension extends Extension
+class WerkintRedisExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -42,6 +42,6 @@ class WerkintMemcachedExtension extends Extension
 
     public function getAlias()
     {
-        return 'werkint_memcached';
+        return 'werkint_redis';
     }
 }

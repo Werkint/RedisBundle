@@ -1,13 +1,13 @@
 services:
-    werkint.memcached.service:
-        class: Werkint\Bundle\MemcachedBundle\Service\Memcached
+    werkint.redis.service:
+        class: Werkint\Bundle\RedisBundle\Service\Memcached
         arguments:
             - %werkint_memcached_host%
             - %werkint_memcached_port%
-    werkint.memcached.provider:
+    werkint.redis.provider:
         class:    Doctrine\Common\Cache\MemcachedCache
         abstract: true
-    werkint.memcached.session:
+    werkint.redis.session:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
         arguments:
             - @werkint.memcached.service

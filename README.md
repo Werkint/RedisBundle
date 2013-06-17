@@ -1,7 +1,7 @@
-MemcachedBundle
+RedisBundle
 ===============
 
-# Bundle providing Memcached (namespaced) for services via tags
+# Bundle providing Redis (namespaced) for services via tags
 
 This bundle allows separation of services with namespaces. You tag each service which use Memcached, so when the container is being compiled, each service get an instance of doctrine cache provider with corresponding namespace set. Also this bundle helps store sessions in namespaces.
 
@@ -13,7 +13,7 @@ Also notice, that full namespace for services would be something like "company_d
 framework:
     ...
     session:
-        handler_id: werkint.memcached.session
+        handler_id: werkint.redis.session
 werkint_memcached:
     host:   localhost
     port:   11211
@@ -31,9 +31,9 @@ services:
         class: Company\MainBundle\Service\Service
         arguments:
             ...
-            - @werkint.memcached.ns.theservice
+            - @werkint.redis.ns.theservice
         tags:
-            - { name: werkint.memcached.cacher, ns: theservice }
+            - { name: werkint.redis.cacher, ns: theservice }
 ```
 
 ```php

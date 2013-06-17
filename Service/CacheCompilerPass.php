@@ -1,31 +1,31 @@
 <?php
-namespace Werkint\Bundle\MemcachedBundle\Service;
+namespace Werkint\Bundle\RedisBundle\Service;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\DefinitionDecorator,
-    Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Reference;
 
 class CacheCompilerPass implements CompilerPassInterface
 {
-    const PROVIDER_PREFIX = 'werkint.memcached.ns';
-    const SERVICE_NAME = 'werkint.memcached.service';
+    const PROVIDER_PREFIX = 'werkint.redis.ns';
+    const SERVICE_NAME = 'werkint.redis.service';
 
     public function process(ContainerBuilder $container)
     {
         // Проходимся по списку
-        $list = $container->findTaggedServiceIds('werkint.memcached.cacher');
+        $list = $container->findTaggedServiceIds('werkint.redis.cacher');
         foreach ($list as $id => $attributes) {
             if (!isset($attributes[0]['ns'])) {
                 throw new \Exception('Wrong namespace in ' . $id);
             }
-            $namespace = $container->getParameter('werkint_memcached_prefix') . '_' . $attributes[0]['ns'];
-            $definition = new DefinitionDecorator('werkint.memcached.provider');
+            $namespace = $container->getParameter('werkint_redis_prefix') . '_' . $attributes[0]['ns'];
+            $definition = new DefinitionDecorator('werkint.redis.provider');
             $definition->addMethodCall(
                 'setNamespace', [$namespace]
             );
             $definition->addMethodCall(
-                'setMemcached', [new Reference(static::SERVICE_NAME)]
+                'setRedis', [new Reference(static::SERVICE_NAME)]
             );
             $definition->setPublic(false);
             $container->setDefinition(

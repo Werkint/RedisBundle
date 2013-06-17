@@ -1,9 +1,9 @@
 {
-    "name":        "werkint/memcached-bundle",
+    "name":        "werkint/redis-bundle",
     "type":        "library",
-    "description": "Bundle providing Memcached (namespaced) for services via tags",
+    "description": "Bundle providing Redis (namespaced) for services via tags",
     "license":     "own",
-    "target-dir":  "Werkint/Bundle/MemcachedBundle",
+    "target-dir":  "Werkint/Bundle/RedisBundle",
 
     "authors":  [
         {
@@ -12,11 +12,12 @@
         }
     ],
     "require":  {
-        "php": ">=5.3"
+        "php":           ">=5.3",
+        "predis/predis": "*"
     },
     "autoload": {
         "psr-0": {
-            "Werkint\\Bundle\\MemcachedBundle": ""
+            "Werkint\\Bundle\\RedisBundle": ""
         }
     }
 }

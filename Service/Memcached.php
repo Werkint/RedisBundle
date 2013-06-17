@@ -1,7 +1,7 @@
 <?php
-namespace Werkint\Bundle\MemcachedBundle\Service;
+namespace Werkint\Bundle\RedisBundle\Service;
 
-use \Memcached as Ref;
+use Memcached as Ref;
 
 class Memcached extends Ref
 {
