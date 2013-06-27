@@ -12,8 +12,8 @@
         }
     ],
     "require":  {
-        "php":           ">=5.3",
-        "predis/predis": "*"
+        "predis/predis": "*",
+        "php":           ">=5.4"
     },
     "autoload": {
         "psr-0": {

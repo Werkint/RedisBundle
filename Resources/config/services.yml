@@ -4,6 +4,7 @@ services:
         arguments:
             - %werkint_redis_host%
             - %werkint_redis_port%
+            - %werkint_redis_pass%
     werkint.redis.provider:
         class:    Werkint\Bundle\RedisBundle\Service\RedisCache
         abstract: true

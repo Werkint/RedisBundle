@@ -25,6 +25,9 @@ class WerkintRedisExtension extends Extension
             $this->getAlias() . '_port', $config['port']
         );
         $container->setParameter(
+            $this->getAlias() . '_pass', $config['pass']
+        );
+        $container->setParameter(
             $this->getAlias() . '_prefix', $config['prefix']
         );
         $container->setParameter(
