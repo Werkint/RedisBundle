@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode->scalarNode('host')->end();
         $rootNode->scalarNode('port')->end();
+        $rootNode->scalarNode('pass')->end();
         $rootNode->scalarNode('prefix')->end();
 
         $rootNode->arrayNode('session')

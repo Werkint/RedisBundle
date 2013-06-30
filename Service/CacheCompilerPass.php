@@ -16,21 +16,28 @@ class CacheCompilerPass implements CompilerPassInterface
         // Проходимся по списку
         $list = $container->findTaggedServiceIds('werkint.redis.cacher');
         foreach ($list as $id => $attributes) {
+            $ns = isset($attributes[0]['ns']) ? $attributes[0]['ns'] : '_root';
+            $definition = new DefinitionDecorator('werkint.redis.provider');
+            $definition->addTag('werkint.redis.cacheservice', ['ns' => $ns]);
+            $definition->setPublic(false);
+            $container->setDefinition(
+                static::PROVIDER_PREFIX . '.' . $attributes[0]['ns'],
+                $definition
+            );
+        }
+        // Проходимся по списку
+        $list = $container->findTaggedServiceIds('werkint.redis.cacheservice');
+        foreach ($list as $id => $attributes) {
+            $definition = $container->getDefinition($id);
             if (!isset($attributes[0]['ns'])) {
                 throw new \Exception('Wrong namespace in ' . $id);
             }
             $namespace = $container->getParameter('werkint_redis_prefix') . '_' . $attributes[0]['ns'];
-            $definition = new DefinitionDecorator('werkint.redis.provider');
             $definition->addMethodCall(
                 'setNamespace', [$namespace]
             );
             $definition->addMethodCall(
                 'setRedis', [new Reference(static::SERVICE_NAME)]
-            );
-            $definition->setPublic(false);
-            $container->setDefinition(
-                static::PROVIDER_PREFIX . '.' . $attributes[0]['ns'],
-                $definition
             );
         }
     }

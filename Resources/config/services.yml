@@ -4,6 +4,7 @@ services:
         arguments:
             - %werkint_redis_host%
             - %werkint_redis_port%
+            - %werkint_redis_pass%
     werkint.redis.provider:
         class:    Werkint\Bundle\RedisBundle\Service\RedisCache
         abstract: true
@@ -13,3 +14,7 @@ services:
             - @werkint.redis.service
             - { cookie_lifetime: %werkint_redis_session_expire% }
             - %werkint_redis_session_prefix%
+    werkint.redis.doctrinecacher:
+        class: Werkint\Bundle\RedisBundle\Service\DoctrineCacher
+        tags:
+            - { name: werkint.redis.cacheservice, ns: werkint.doctrine }
