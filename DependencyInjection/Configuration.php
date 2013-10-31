@@ -19,15 +19,15 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root($this->alias)->children();
 
-        $rootNode->scalarNode('host')->end();
-        $rootNode->scalarNode('port')->end();
+        $rootNode->scalarNode('host')->defaultValue('127.0.0.1')->end();
+        $rootNode->scalarNode('port')->defaultValue('6379')->end();
         $rootNode->scalarNode('pass')->end();
-        $rootNode->scalarNode('prefix')->end();
+        $rootNode->scalarNode('project')->end();
 
         $rootNode->arrayNode('session')
             ->children()
             ->scalarNode('prefix')->end()
-            ->scalarNode('expire')->end()
+            ->scalarNode('expire')->defaultValue('3600')->end()
             ->end()
             ->end();
 

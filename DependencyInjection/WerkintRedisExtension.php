@@ -9,12 +9,16 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class WerkintRedisExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
-    {
+    public function load(
+        array $configs,
+        ContainerBuilder $container
+    ) {
         $processor = new Processor();
         $config = $processor->processConfiguration(
-            new Configuration($this->getAlias()), $configs
+            new Configuration($this->getAlias()),
+            $configs
         );
+        // TODO: привести в порядок
         $container->setParameter(
             $this->getAlias(), $config
         );
@@ -28,7 +32,12 @@ class WerkintRedisExtension extends Extension
             $this->getAlias() . '_pass', $config['pass']
         );
         $container->setParameter(
-            $this->getAlias() . '_prefix', $config['prefix']
+            $this->getAlias() . '_project', $config['project']
+        );
+        $prefix = $config['project'] . '_';
+        $prefix .= $container->getParameter('kernel.environment');
+        $container->setParameter(
+            $this->getAlias() . '_prefix', $prefix
         );
         $container->setParameter(
             $this->getAlias() . '_session_prefix', $config['session']['prefix']
@@ -41,10 +50,5 @@ class WerkintRedisExtension extends Extension
             new FileLocator(__DIR__ . '/../Resources/config')
         );
         $loader->load('services.yml');
-    }
-
-    public function getAlias()
-    {
-        return 'werkint_redis';
     }
 }
