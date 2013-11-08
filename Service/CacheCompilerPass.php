@@ -6,7 +6,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
-class CacheCompilerPass implements CompilerPassInterface
+/**
+ * CacheCompilerPass.
+ *
+ * @author Bogdan Yurov <bogdan@yurov.me>
+ */
+class CacheCompilerPass implements
+    CompilerPassInterface
 {
     const PROVIDER_PREFIX = 'werkint.redis.ns';
     const SERVICE_NAME = 'werkint.redis.service';

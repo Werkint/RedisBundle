@@ -1,21 +1,20 @@
 {
     "name":        "werkint/redis-bundle",
-    "type":        "library",
     "description": "Bundle providing Redis (namespaced) for services via tags",
-    "license":     "own",
-    "target-dir":  "Werkint/Bundle/RedisBundle",
-
-    "authors":  [
+    "license":     "GPL-3.0+",
+    "authors":     [
         {
             "name":  "Bogdan Yurov",
             "email": "bogdan@yurov.me"
         }
     ],
-    "require":  {
+    "require":     {
         "predis/predis": "*",
-        "php":           ">=5.4"
+
+        "php": ">=5.4"
     },
-    "autoload": {
+    "target-dir":  "Werkint/Bundle/RedisBundle",
+    "autoload":    {
         "psr-0": {
             "Werkint\\Bundle\\RedisBundle": ""
         }
