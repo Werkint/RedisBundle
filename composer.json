@@ -9,6 +9,9 @@
         }
     ],
     "require":     {
+        "doctrine/common":          "*",
+        "symfony/framework-bundle": "*",
+
         "predis/predis": "*",
 
         "php": ">=5.4"
