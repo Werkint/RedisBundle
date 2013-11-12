@@ -21,5 +21,10 @@
         "psr-0": {
             "Werkint\\Bundle\\RedisBundle": ""
         }
+    },
+    "extra":       {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
     }
 }
