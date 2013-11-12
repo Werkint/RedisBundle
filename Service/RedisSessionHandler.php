@@ -7,22 +7,13 @@ namespace Werkint\Bundle\RedisBundle\Service;
  * @author Justin Rainbow <justin.rainbow@gmail.com>
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Henrik Westphal <henrik.westphal@gmail.com>
+ * @author Bogdan Yurov <bogdan@yurov.me>
  */
-class RedisSessionHandler implements \SessionHandlerInterface
+class RedisSessionHandler implements
+    \SessionHandlerInterface
 {
-    /**
-     * @var Redis
-     */
     protected $redis;
-
-    /**
-     * @var int
-     */
     protected $ttl;
-
-    /**
-     * @var string
-     */
     protected $prefix;
 
     /**
@@ -33,7 +24,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
      * @param string $prefix  Prefix to use when writing session data
      */
     public function __construct(
-        $redis, array $options = [], $prefix = 'session'
+        Redis $redis,
+        array $options = [],
+        $prefix = 'session'
     ) {
         $this->redis = $redis;
         $this->ttl = isset($options['cookie_lifetime']) ? (int)$options['cookie_lifetime'] : 0;
@@ -41,15 +34,17 @@ class RedisSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function open($savePath, $sessionName)
-    {
+    public function open(
+        $savePath,
+        $sessionName
+    ) {
         return true;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -57,7 +52,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function read($sessionId)
     {
@@ -65,19 +60,30 @@ class RedisSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function write($sessionId, $data)
-    {
+    public function write(
+        $sessionId,
+        $data
+    ) {
         if (0 < $this->ttl) {
-            $this->redis->setex($this->getRedisKey($sessionId), $this->ttl, $data);
+            $this->redis->setex(
+                $this->getRedisKey($sessionId),
+                $this->ttl,
+                $data
+            );
         } else {
-            $this->redis->set($this->getRedisKey($sessionId), $data);
+            $this->redis->set(
+                $this->getRedisKey($sessionId),
+                $data
+            );
         }
+
+        return true;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function destroy($sessionId)
     {
@@ -87,7 +93,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function gc($lifetime)
     {
@@ -106,6 +112,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
 
     /**
      * Prepends the session ID with a user-defined prefix (if any).
+     *
      * @param string $sessionId session ID
      *
      * @return string prefixed session ID
@@ -118,4 +125,5 @@ class RedisSessionHandler implements \SessionHandlerInterface
 
         return $this->prefix . ':' . $sessionId;
     }
+
 }

@@ -9,12 +9,11 @@ use Doctrine\Common\Cache\CacheProvider;
  *
  * @author Justin Rainbow <justin.rainbow@gmail.com>
  * @author Henrik Westphal <henrik.westphal@gmail.com>
+ * @author Bogdan Yurov <bogdan@yurov.me>
  */
 class RedisCache extends CacheProvider
 {
-    /**
-     * @var Redis
-     */
+    /** @var Redis */
     protected $redis;
 
     /**
@@ -100,4 +99,5 @@ class RedisCache extends CacheProvider
             Cache::STATS_MEMORY_AVAILIABLE => null,
         ];
     }
+
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Werkint\Bundle\RedisBundle\Service;
+namespace Werkint\Bundle\RedisBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -7,35 +7,43 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * CacheCompilerPass.
+ * CacheProviderPass.
  *
  * @author Bogdan Yurov <bogdan@yurov.me>
  */
-class CacheCompilerPass implements
+class CacheProviderPass implements
     CompilerPassInterface
 {
+    const CLASS_SRV = 'werkint.redis.service';
+    const CLASS_TAG1 = 'werkint.redis.cache';
+    const CLASS_TAG2 = 'werkint.redis.cacher';
+    const CLASS_TAG_SRV = 'werkint.redis.cacheservice';
+    const PROVIDER_CLASS = 'werkint.redis.provider';
     const PROVIDER_PREFIX = 'werkint.redis.ns';
-    const SERVICE_NAME = 'werkint.redis.service';
 
-    protected function processServices(ContainerBuilder $container)
-    {
+    /**
+     * @param ContainerBuilder $container
+     */
+    protected function processServices(
+        ContainerBuilder $container
+    ) {
         $nsprefix = $container->getParameter('werkint_redis_prefix') . '_';
-        $list = $container->findTaggedServiceIds('werkint.redis.cacher');
+        $list = $container->findTaggedServiceIds(static::CLASS_TAG2);
         foreach ($list as $attributes) {
             $ns = isset($attributes[0]['ns']) ? $attributes[0]['ns'] : '_root';
-            $definition = new DefinitionDecorator('werkint.redis.provider');
-            $definition->addTag('werkint.redis.cacheservice', ['ns' => $nsprefix . $ns]);
+            $definition = new DefinitionDecorator(static::PROVIDER_CLASS);
+            $definition->addTag(static::CLASS_TAG_SRV, ['ns' => $nsprefix . $ns]);
             $definition->setPublic(false);
             $container->setDefinition(
                 static::PROVIDER_PREFIX . '.' . $ns,
                 $definition
             );
         }
-        $list = $container->findTaggedServiceIds('werkint.redis.cache');
+        $list = $container->findTaggedServiceIds(static::CLASS_TAG1);
         foreach ($list as $attributes) {
             $ns = isset($attributes[0]['ns']) ? $attributes[0]['ns'] : '_root';
-            $definition = new DefinitionDecorator('werkint.redis.provider');
-            $definition->addTag('werkint.redis.cacheservice', ['ns' => $nsprefix . '_' . $ns]);
+            $definition = new DefinitionDecorator(static::PROVIDER_CLASS);
+            $definition->addTag(static::CLASS_TAG_SRV, ['ns' => $nsprefix . '_' . $ns]);
             $definition->setPublic(false);
             $container->setDefinition(
                 $container->getParameter('werkint_redis_project') . '.cache.' . $ns,
@@ -44,13 +52,20 @@ class CacheCompilerPass implements
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
-        // Проходимся по списку
+        if (!$container->hasDefinition(static::CLASS_SRV)) {
+            return;
+        }
+
+        // Go through list
         $this->processServices($container);
 
-        // Проходимся по списку
-        $list = $container->findTaggedServiceIds('werkint.redis.cacheservice');
+        // Go through list
+        $list = $container->findTaggedServiceIds(static::CLASS_TAG_SRV);
         foreach ($list as $id => $attributes) {
             $definition = $container->getDefinition($id);
             if (!isset($attributes[0]['ns'])) {
@@ -60,8 +75,9 @@ class CacheCompilerPass implements
                 'setNamespace', [$attributes[0]['ns']]
             );
             $definition->addMethodCall(
-                'setRedis', [new Reference(static::SERVICE_NAME)]
+                'setRedis', [new Reference(static::CLASS_SRV)]
             );
         }
     }
+
 }

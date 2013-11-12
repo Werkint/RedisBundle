@@ -10,6 +10,11 @@ use Predis\Client;
  */
 class Redis extends Client
 {
+    /**
+     * @param string $host
+     * @param int    $port
+     * @param string $pass
+     */
     public function __construct(
         $host,
         $port,
@@ -21,4 +26,5 @@ class Redis extends Client
             'password' => $pass,
         ]);
     }
+
 }

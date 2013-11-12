@@ -3,7 +3,7 @@ namespace Werkint\Bundle\RedisBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Werkint\Bundle\RedisBundle\Service\CacheCompilerPass;
+use Werkint\Bundle\RedisBundle\DependencyInjection\Compiler\CacheProviderPass;
 
 /**
  * WerkintRedisBundle.
@@ -17,6 +17,7 @@ class WerkintRedisBundle extends Bundle
         parent::build($container);
 
         // Cache
-        $container->addCompilerPass(new CacheCompilerPass);
+        $container->addCompilerPass(new CacheProviderPass);
     }
+
 }

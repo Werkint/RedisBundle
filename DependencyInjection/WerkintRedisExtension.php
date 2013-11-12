@@ -14,6 +14,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class WerkintRedisExtension extends Extension
 {
+    /**
+     * {@inheritdoc}
+     */
     public function load(
         array $configs,
         ContainerBuilder $container
@@ -23,21 +26,25 @@ class WerkintRedisExtension extends Extension
             new Configuration($this->getAlias()),
             $configs
         );
-        // TODO: привести в порядок
+        // TODO: restructure
         $container->setParameter(
             $this->getAlias(), $config
         );
         $container->setParameter(
-            $this->getAlias() . '_host', $config['host']
+            $this->getAlias() . '_host',
+            $config['host']
         );
         $container->setParameter(
-            $this->getAlias() . '_port', $config['port']
+            $this->getAlias() . '_port',
+            $config['port']
         );
         $container->setParameter(
-            $this->getAlias() . '_pass', $config['pass']
+            $this->getAlias() . '_pass',
+            $config['pass']
         );
         $container->setParameter(
-            $this->getAlias() . '_project', $config['project']
+            $this->getAlias() . '_project',
+            $config['project']
         );
         $prefix = $config['project'] . '_';
         $prefix .= $container->getParameter('kernel.environment');
@@ -45,10 +52,12 @@ class WerkintRedisExtension extends Extension
             $this->getAlias() . '_prefix', $prefix
         );
         $container->setParameter(
-            $this->getAlias() . '_session_prefix', $config['session']['prefix']
+            $this->getAlias() . '_session_prefix',
+            $config['session']['prefix']
         );
         $container->setParameter(
-            $this->getAlias() . '_session_expire', $config['session']['expire']
+            $this->getAlias() . '_session_expire',
+            $config['session']['expire']
         );
         $loader = new YamlFileLoader(
             $container,
@@ -56,4 +65,5 @@ class WerkintRedisExtension extends Extension
         );
         $loader->load('services.yml');
     }
+
 }

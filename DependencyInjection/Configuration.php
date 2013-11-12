@@ -12,32 +12,44 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements
     ConfigurationInterface
 {
+    protected $alias;
 
-    private $alias;
-
+    /**
+     * @param string $alias
+     */
     public function __construct($alias)
     {
         $this->alias = $alias;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root($this->alias)->children();
 
-        $rootNode->scalarNode('host')->defaultValue('127.0.0.1')->end();
-        $rootNode->scalarNode('port')->defaultValue('6379')->end();
-        $rootNode->scalarNode('pass')->end();
-        $rootNode->scalarNode('project')->end();
-
-        $rootNode->arrayNode('session')
+        // @formatter:off
+        $treeBuilder
+            ->root($this->alias)
             ->children()
-            ->scalarNode('prefix')->end()
-            ->scalarNode('expire')->defaultValue('3600')->end()
+                ->scalarNode('host')->defaultValue('127.0.0.1')->end()
+                ->scalarNode('port')->defaultValue('6379')->end()
+                ->scalarNode('pass')->defaultValue('')->end()
+                ->scalarNode('project')->isRequired()->end()
+                ->arrayNode('session')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('prefix')->defaultValue('sess')->end()
+                        ->scalarNode('expire')->defaultValue('3600')->end()
+                    ->end()
+                ->end()
             ->end()
-            ->end();
+        ;
+        // @formatter:on
 
-        $rootNode->end();
         return $treeBuilder;
+
     }
+
 }
