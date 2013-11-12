@@ -9,8 +9,8 @@
         }
     ],
     "require":     {
-        "doctrine/common":          "*",
-        "symfony/framework-bundle": "*",
+        "doctrine/common":          "2.4.*",
+        "symfony/framework-bundle": "2.3.*",
 
         "predis/predis": "*",
 
@@ -26,5 +26,7 @@
         "branch-alias": {
             "dev-master": "0.1.x-dev"
         }
-    }
+    },
+
+    "minimum-stability": "dev"
 }
