@@ -22,4 +22,5 @@ class WerkintRedisBundleTest extends \PHPUnit_Framework_TestCase
         $obj = new WerkintRedisBundle();
         $obj->build($containerBuilderMock);
     }
+
 }

@@ -15,42 +15,11 @@ class CacheProviderPass implements
     CompilerPassInterface
 {
     const CLASS_SRV = 'werkint.redis.service';
-    const CLASS_TAG1 = 'werkint.redis.cache';
-    const CLASS_TAG2 = 'werkint.redis.cacher';
-    const CLASS_TAG_SRV = 'werkint.redis.cacheservice';
+    const CLASS_TAG = 'werkint.redis.cache';
+    // Prefix for all cache services
+    const PROVIDER_PREFIX = 'werkint.redis.ns.';
+    // Basic cache services
     const PROVIDER_CLASS = 'werkint.redis.provider';
-    const PROVIDER_PREFIX = 'werkint.redis.ns';
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    protected function processServices(
-        ContainerBuilder $container
-    ) {
-        $nsprefix = $container->getParameter('werkint_redis_prefix') . '_';
-        $list = $container->findTaggedServiceIds(static::CLASS_TAG2);
-        foreach ($list as $attributes) {
-            $ns = isset($attributes[0]['ns']) ? $attributes[0]['ns'] : '_root';
-            $definition = new DefinitionDecorator(static::PROVIDER_CLASS);
-            $definition->addTag(static::CLASS_TAG_SRV, ['ns' => $nsprefix . $ns]);
-            $definition->setPublic(false);
-            $container->setDefinition(
-                static::PROVIDER_PREFIX . '.' . $ns,
-                $definition
-            );
-        }
-        $list = $container->findTaggedServiceIds(static::CLASS_TAG1);
-        foreach ($list as $attributes) {
-            $ns = isset($attributes[0]['ns']) ? $attributes[0]['ns'] : '_root';
-            $definition = new DefinitionDecorator(static::PROVIDER_CLASS);
-            $definition->addTag(static::CLASS_TAG_SRV, ['ns' => $nsprefix . '_' . $ns]);
-            $definition->setPublic(false);
-            $container->setDefinition(
-                $container->getParameter('werkint_redis_project') . '.cache.' . $ns,
-                $definition
-            );
-        }
-    }
 
     /**
      * {@inheritdoc}
@@ -58,25 +27,52 @@ class CacheProviderPass implements
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition(static::CLASS_SRV)) {
-            return;
+            return false;
         }
+        $project = $container->getParameter('werkint_redis_project');
+        $prefix = $container->getParameter('werkint_redis_prefix');
 
         // Go through list
-        $this->processServices($container);
-
-        // Go through list
-        $list = $container->findTaggedServiceIds(static::CLASS_TAG_SRV);
+        $list = $container->findTaggedServiceIds(static::CLASS_TAG);
         foreach ($list as $id => $attributes) {
             $definition = $container->getDefinition($id);
-            if (!isset($attributes[0]['ns'])) {
-                throw new \Exception('Wrong namespace in ' . $id);
+            foreach ($attributes as $a) {
+                $scope = isset($a['scope']) ? $a['scope'] : 'project';
+                if (!in_array($scope, ['root', 'project'])) {
+                    throw new \InvalidArgumentException('Wrong service scope of ' . $id);
+                }
+
+                $ns = static::PROVIDER_PREFIX;
+                $cacheNs = $prefix;
+                if ($scope == 'root') {
+                    if (!isset($a['ns'])) {
+                        throw new \InvalidArgumentException('Service namespace not defined of ' . $id);
+                    }
+                    $ns .= '_root.' . $a['ns'];
+                    $cacheNs .= '_root.' . $a['ns'];
+                } else {
+                    $ns .= $project;
+                    if (isset($a['ns'])) {
+                        $ns .= '.' . $a['ns'];
+                        $cacheNs .= '.' . $a['ns'];
+                    }
+                }
+
+                if ($container->hasDefinition($ns)) {
+                    $cache = $container->getDefinition($ns);
+                } else {
+                    $cache = new DefinitionDecorator(static::PROVIDER_CLASS);
+                    $cache->setPublic(false);
+                    $cache->addMethodCall(
+                        'setNamespace', [$cacheNs]
+                    );
+                    $cache->addMethodCall(
+                        'setRedis', [new Reference(static::CLASS_SRV)]
+                    );
+                    $container->setDefinition($ns, $cache);
+                }
+                $definition->addArgument($cache);
             }
-            $definition->addMethodCall(
-                'setNamespace', [$attributes[0]['ns']]
-            );
-            $definition->addMethodCall(
-                'setRedis', [new Reference(static::CLASS_SRV)]
-            );
         }
     }
 

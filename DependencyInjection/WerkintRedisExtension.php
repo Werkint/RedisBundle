@@ -31,16 +31,8 @@ class WerkintRedisExtension extends Extension
             $this->getAlias(), $config
         );
         $container->setParameter(
-            $this->getAlias() . '_host',
-            $config['host']
-        );
-        $container->setParameter(
-            $this->getAlias() . '_port',
-            $config['port']
-        );
-        $container->setParameter(
-            $this->getAlias() . '_pass',
-            $config['pass']
+            $this->getAlias() . '_connection',
+            $config['connection']
         );
         $container->setParameter(
             $this->getAlias() . '_project',
@@ -52,12 +44,8 @@ class WerkintRedisExtension extends Extension
             $this->getAlias() . '_prefix', $prefix
         );
         $container->setParameter(
-            $this->getAlias() . '_session_prefix',
-            $config['session']['prefix']
-        );
-        $container->setParameter(
-            $this->getAlias() . '_session_expire',
-            $config['session']['expire']
+            $this->getAlias() . '_session',
+            $config['session']
         );
         $loader = new YamlFileLoader(
             $container,

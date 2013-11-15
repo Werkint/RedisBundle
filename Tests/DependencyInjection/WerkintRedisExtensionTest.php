@@ -21,22 +21,26 @@ class WerkintRedisExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testConfig()
     {
-        $container = $this->loadContainer(['project' => 'test123']);
+        $container = $this->loadContainer($this->getDefaultConfig());
 
         $this->assertTrue($container->hasParameter('werkint_redis_project'));
         $this->assertEquals('test123', $container->getParameter('werkint_redis_project'));
+        $this->assertTrue($container->hasParameter('werkint_redis_connection'));
+        $this->assertTrue($container->hasParameter('werkint_redis_session'));
+        $this->assertTrue($container->hasParameter('werkint_redis_prefix'));
+        $this->assertEquals('test123_foo', $container->getParameter('werkint_redis_prefix'));
     }
 
     public function testPrefix()
     {
-        $container = $this->loadContainer(['project' => 'test123']);
+        $container = $this->loadContainer($this->getDefaultConfig());
 
         $this->assertEquals('test123_foo', $container->getParameter('werkint_redis_prefix'));
     }
 
     public function testServices()
     {
-        $container = $this->loadContainer(['project' => 'test123']);
+        $container = $this->loadContainer($this->getDefaultConfig());
 
         $this->assertTrue(
             $container->hasDefinition('werkint.redis.service'),
@@ -56,4 +60,15 @@ class WerkintRedisExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load([$config], $container);
         return $container;
     }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultConfig()
+    {
+        return [
+            'project' => 'test123',
+        ];
+    }
+
 }

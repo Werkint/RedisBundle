@@ -1,6 +1,8 @@
 <?php
 namespace Werkint\Bundle\RedisBundle\Service;
 
+use Predis\Client;
+
 /**
  * Redis based session storage
  *
@@ -19,12 +21,12 @@ class RedisSessionHandler implements
     /**
      * Redis session storage constructor
      *
-     * @param Redis  $redis   Redis database connection
-     * @param array  $options Session options
-     * @param string $prefix  Prefix to use when writing session data
+     * @param Redis|Client $redis   Redis database connection
+     * @param array        $options Session options
+     * @param string       $prefix  Prefix to use when writing session data
      */
     public function __construct(
-        Redis $redis,
+        Client $redis,
         array $options = [],
         $prefix = 'session'
     ) {

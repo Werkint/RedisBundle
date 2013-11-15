@@ -14,13 +14,14 @@ framework:
     ...
     session:
         handler_id: werkint.redis.session
-werkint_memcached:
+werkint_redis:
     host:   localhost
     port:   11211
     prefix: company_%kernel.environment%
     session:
         prefix: company_%kernel.environment%_sess
         expire: 3600
+        provider: redis ; or apc
 ```
 
 ### Adding tagged services (namespace: "theservice")
@@ -28,12 +29,12 @@ werkint_memcached:
 ```
 services:
     company.service:
-        class: Company\MainBundle\Service\Service
+        class: Company\MainBundle\Service\Fooservice
         arguments:
             ...
             - @werkint.redis.ns.theservice
         tags:
-            - { name: werkint.redis.cacher, ns: theservice }
+            - { name: werkint.redis.cache, scope: project, ns: foo  }
 ```
 
 ```php
