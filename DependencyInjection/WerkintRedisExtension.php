@@ -44,8 +44,12 @@ class WerkintRedisExtension extends Extension
             $this->getAlias() . '_prefix', $prefix
         );
         $container->setParameter(
-            $this->getAlias() . '_session',
-            $config['session']
+            $this->getAlias() . '_session_prefix',
+            $config['session']['prefix']
+        );
+        $container->setParameter(
+            $this->getAlias() . '_session_expire',
+            $config['session']['expire']
         );
         $loader = new YamlFileLoader(
             $container,

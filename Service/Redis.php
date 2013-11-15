@@ -11,19 +11,15 @@ use Predis\Client;
 class Redis extends Client
 {
     /**
-     * @param string $host
-     * @param int    $port
-     * @param string $pass
+     * @param array $connection
      */
     public function __construct(
-        $host,
-        $port,
-        $pass
+        array $connection
     ) {
         parent::__construct([
-            'host'     => $host,
-            'port'     => $port,
-            'password' => $pass,
+            'host'     => $connection['host'],
+            'port'     => $connection['port'],
+            'password' => $connection['pass'],
         ]);
     }
 

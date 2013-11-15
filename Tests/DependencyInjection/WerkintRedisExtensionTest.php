@@ -26,7 +26,7 @@ class WerkintRedisExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasParameter('werkint_redis_project'));
         $this->assertEquals('test123', $container->getParameter('werkint_redis_project'));
         $this->assertTrue($container->hasParameter('werkint_redis_connection'));
-        $this->assertTrue($container->hasParameter('werkint_redis_session'));
+        $this->assertTrue($container->hasParameter('werkint_redis_session_prefix'));
         $this->assertTrue($container->hasParameter('werkint_redis_prefix'));
         $this->assertEquals('test123_foo', $container->getParameter('werkint_redis_prefix'));
     }
