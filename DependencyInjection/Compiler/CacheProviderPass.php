@@ -3,6 +3,7 @@ namespace Werkint\Bundle\RedisBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -16,6 +17,7 @@ class CacheProviderPass implements
 {
     const CLASS_SRV = 'werkint.redis.service';
     const CLASS_TAG = 'werkint.redis.cache';
+    const CLASS_DOCTRINE = 'werkint.redis.doctrinecacher';
     // Prefix for all cache services
     const PROVIDER_PREFIX = 'werkint.redis.ns.';
     // Basic cache services
@@ -31,6 +33,10 @@ class CacheProviderPass implements
         }
         $project = $container->getParameter('werkint_redis_project');
         $prefix = $container->getParameter('werkint_redis_prefix');
+
+        // Doctrine
+        $cache = $container->getDefinition(static::CLASS_DOCTRINE);
+        $this->setRedis($cache, $prefix . '_doctrine');
 
         // Go through list
         $list = $container->findTaggedServiceIds(static::CLASS_TAG);
@@ -63,17 +69,28 @@ class CacheProviderPass implements
                 } else {
                     $cache = new DefinitionDecorator(static::PROVIDER_CLASS);
                     $cache->setPublic(false);
-                    $cache->addMethodCall(
-                        'setNamespace', [$cacheNs]
-                    );
-                    $cache->addMethodCall(
-                        'setRedis', [new Reference(static::CLASS_SRV)]
-                    );
+                    $this->setRedis($cache, $cacheNs);
                     $container->setDefinition($ns, $cache);
                 }
                 $definition->addArgument($cache);
             }
         }
+    }
+
+    /**
+     * @param Definition $cache
+     * @param string     $cacheNs
+     */
+    protected function setRedis(
+        Definition $cache,
+        $cacheNs
+    ) {
+        $cache->addMethodCall(
+            'setNamespace', [$cacheNs]
+        );
+        $cache->addMethodCall(
+            'setRedis', [new Reference(static::CLASS_SRV)]
+        );
     }
 
 }

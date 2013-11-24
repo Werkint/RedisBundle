@@ -14,5 +14,6 @@ services:
             - %werkint_redis_session_prefix%
     werkint.redis.doctrinecacher:
         class: Werkint\Bundle\RedisBundle\Service\DoctrineCacher
+        parent: werkint.redis.provider
         tags:
             - { name: werkint.redis.cacheservice, ns: werkint.doctrine }
