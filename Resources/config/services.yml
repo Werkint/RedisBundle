@@ -4,7 +4,7 @@ services:
         arguments:
             - %werkint_redis_connection%
     werkint.redis.provider:
-        class:    Werkint\Bundle\RedisBundle\Service\RedisCache
+        class: Werkint\Bundle\RedisBundle\Service\RedisCache
         abstract: true
     werkint.redis.session:
         class: Werkint\Bundle\RedisBundle\Service\RedisSessionHandler

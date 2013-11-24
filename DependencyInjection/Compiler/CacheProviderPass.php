@@ -68,11 +68,11 @@ class CacheProviderPass implements
                     $cache = $container->getDefinition($ns);
                 } else {
                     $cache = new DefinitionDecorator(static::PROVIDER_CLASS);
-                    $cache->setPublic(false);
+                    $cache->setPublic(true);
                     $this->setRedis($cache, $cacheNs);
                     $container->setDefinition($ns, $cache);
                 }
-                $definition->addArgument($cache);
+                $definition->addArgument(new Reference($ns));
             }
         }
     }
