@@ -16,10 +16,9 @@
 
         "php": ">=5.4"
     },
-    "target-dir":  "Werkint/Bundle/RedisBundle",
     "autoload":    {
-        "psr-0": {
-            "Werkint\\Bundle\\RedisBundle": ""
+        "psr-4": {
+            "Werkint\\Bundle\\RedisBundle\\": "src/"
         }
     },
     "extra":       {
