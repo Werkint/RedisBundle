@@ -18,7 +18,8 @@
     },
     "autoload":    {
         "psr-4": {
-            "Werkint\\Bundle\\RedisBundle\\": "src/"
+            "Werkint\\Bundle\\RedisBundle\\": "src/",
+            "Werkint\\Bundle\\RedisBundle\\Tests\\": "tests/"
         }
     },
     "extra":       {
