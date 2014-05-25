@@ -1,5 +1,6 @@
 {
     "name":        "werkint/redis-bundle",
+    "type":        "symfony-bundle",
     "description": "Bundle providing Redis (namespaced) for services via tags",
     "license":     "GPL-3.0+",
     "authors":     [
@@ -14,11 +15,11 @@
 
         "predis/predis": "*",
 
-        "php": ">=5.4"
+        "php": ">=5.5"
     },
     "autoload":    {
         "psr-4": {
-            "Werkint\\Bundle\\RedisBundle\\": "src/",
+            "Werkint\\Bundle\\RedisBundle\\":        "src/",
             "Werkint\\Bundle\\RedisBundle\\Tests\\": "tests/"
         }
     },
