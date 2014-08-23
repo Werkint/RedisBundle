@@ -47,7 +47,6 @@ class Configuration implements
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('prefix')->defaultValue('sess')->end()
-                        ->scalarNode('expire')->defaultValue('3600')->end()
                         ->scalarNode('provider')->defaultValue('redis')->end()
                     ->end()
                 ->end()

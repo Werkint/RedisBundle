@@ -30,6 +30,7 @@ class RedisSessionHandler implements
         array $options = [],
         $prefix = 'session'
     ) {
+        // TODO: Другие опции
         $this->redis = $redis;
         $this->ttl = isset($options['cookie_lifetime']) ? (int)$options['cookie_lifetime'] : 0;
         $this->prefix = $prefix;
